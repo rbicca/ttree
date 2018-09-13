@@ -9,7 +9,6 @@ import { GrupoService } from './../Services/grupo.service';
 })
 export class TreeComponent implements OnInit {
 
-  tree: any[];
   table;
 
   constructor(private svcGrupo:GrupoService) { }
@@ -23,63 +22,45 @@ export class TreeComponent implements OnInit {
 
   }
 
-  generateData(){
-    
+  generateData(){    
     //Init tree
-    this.tree = [];
+    var tree = [];
 
     //Set root
-    const root = this.getRoot();
-    this.tree.push({id: root[0].idProdutoGrupo, name: root[0].Grupo});
+    const root = this.getFiltered(this.table, { idPai: null } );
+    tree.push({id: root[0].idProdutoGrupo, name: root[0].Grupo});
 
-    this.addChild(this.tree[0])
+    //Add children
+    this.addChildren(tree[0])
 
-    console.log('** Result ** ');
-    console.log(JSON.stringify(this.tree));
+    console.log(JSON.stringify(tree));
   }
 
-
-  getRoot(){
-    var filter: any = { idPai: null };
-    let nodeRoot = this.table.filter(function (item: any)
-    {
-      for (var key in filter)
-      {
-        if (item[key] === undefined || item[key] != filter[key])
-        return false;
-      }
-      return true;
-    });
-    return nodeRoot;
-  }
-
-  getChildren(idNode){
-    var filter: any = { idPai: idNode };
-    let nodeChildren = this.table.filter(function (item: any)
-    {
-      for (var key in filter)
-      {
-        if (item[key] === undefined || item[key] != filter[key])
-        return false;
-      }
-      return true;
-    });
-    return nodeChildren;
-  }
-
-
-  addChild(node){
-    let children = this.getChildren(node.id);
+  addChildren(node){
+    let children = this.getFiltered( this.table, { idPai: node.id } );
     if (children) {
       node.children = children.map( n => {
         let c = {
           id: n.idProdutoGrupo,
           name: n.Grupo
         }
-        this.addChild(c);
+        this.addChildren(c);
         return c;
       });
     }
+  }
+
+  getFiltered(data, filter){
+    let node = data.filter(function (item: any)
+    {
+      for (var key in filter)
+      {
+        if (item[key] === undefined || item[key] != filter[key])
+        return false;
+      }
+      return true;
+    });
+    return node;
   }
 
 }
