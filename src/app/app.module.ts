@@ -1,8 +1,12 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
+
 
 import { AppComponent } from './app.component';
 import { TreeComponent } from './tree/tree.component';
+
+import { GrupoService } from './Services/grupo.service';
 
 @NgModule({
   declarations: [
@@ -10,9 +14,10 @@ import { TreeComponent } from './tree/tree.component';
     TreeComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [GrupoService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

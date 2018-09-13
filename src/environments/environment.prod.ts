@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  pathAPI: 'http://docsdigitaisauxiliadora.com:8095/api'
 };
